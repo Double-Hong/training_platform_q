@@ -52,7 +52,7 @@ export default {
     }
   },
   created() {
-    this.test1();
+    // this.test1();
   },
   methods: {
     test1() {
@@ -61,29 +61,27 @@ export default {
       })
     },
     login() {
-      axios.post("http://localhost:9090/user-entity/checkUserMessage", {
-        userName: this.input,
-        sex: "男",
+      axios.post("http://localhost:9090/personal-info-entity/checkUser", {
+        username: this.input,
         password: this.password
       }).then(resp => {
-        if (resp.data.message === '登录成功') {
+        if (resp.data === '登录成功!') {
           ElMessage({
             showClose: true,
-            message: resp.data.message,
+            message: resp.data,
             type: 'success',
           })
-          let username = resp.data.t.userName;
+          let username = this.input
           router.push({
-            path: '/about/' + username
+            path: '/about/'+username
           })
         } else {
           ElMessage({
             showClose: true,
-            message: resp.data.message,
+            message: resp.data,
             type: 'error',
           })
         }
-        // router.replace('/about')
       })
     },
     test3() {
