@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
-import AdministratorView from '../OrganizationAdministratorViews/AdministratorView.vue'
+import AdministratorView from '../views/OrganizationAdministratorViews/AdministratorView.vue'
 
 
 const routes: Array<RouteRecordRaw> = [
