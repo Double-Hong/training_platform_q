@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginView
   },
   {
-    path: '/about/:username',
+    path: '/about',
     name: 'about',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path:'/administrator/:username',
+    path:'/administrator/:id',
     name:'administrator',
     component:AdministratorView
   }
