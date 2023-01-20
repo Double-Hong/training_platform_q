@@ -160,7 +160,7 @@ export default defineComponent({
     onSubmit(){   //登录按钮
       console.log(this.loginForm);
       axios.post("http://localhost:9090/personal-info-entity/checkUser",this.loginForm).then(res=>{
-        if (res.data=== 1){
+        if (res.data=== 1&&this.loginForm.userType === 3){
 
           // Cookies.set('name',this.loginForm.name)
           ElMessage({
@@ -168,7 +168,21 @@ export default defineComponent({
             type: 'success'
           })
           let username =this.loginForm.username
-          router.push({path:'/studentsHome/'+username})
+          router.push({path:'udentsHome/'+username})
+        }
+        else if (res.data === 1&&this.loginForm.userType === 2){
+          ElMessage({
+            message: "Adminnistrator Login successful",
+            type: 'success'
+          })
+          axios.get('http://localhost:9090/personal-info-entity/FindUserByUserName/'+this.loginForm.username).then(res=>{
+            console.log(res.data.id)
+            router.push({path:'/administrator/'+res.data.id})
+          })
+
+        }
+        else if (res.data === 1&&this.loginForm.userType === 1){
+
         }
         else {
           ElMessage.error("用户名或密码错误"
@@ -176,6 +190,7 @@ export default defineComponent({
         }
       })
     },
+
 
   }
 
