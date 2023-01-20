@@ -128,7 +128,7 @@ export default defineComponent({
       add.userType=3
     }
     const makesureadd=()=>{
-      console.log(add)
+      // console.log(add)
       axios.post("http://localhost:9090/personal-info-entity/zhuceUser",add).then(res=>{
         if (res.data=== 1){
 
@@ -137,6 +137,10 @@ export default defineComponent({
             message: "注册成功",
             type: 'success'
           })
+        }
+        else if (res.data === -1) {
+          ElMessage.error("密码和用户名不能为空"
+          )
         }
         else {
           ElMessage.error("注册失败"
@@ -153,7 +157,7 @@ export default defineComponent({
     }
   },
   methods:{
-    onSubmit(){
+    onSubmit(){   //登录按钮
       console.log(this.loginForm);
       axios.post("http://localhost:9090/personal-info-entity/checkUser",this.loginForm).then(res=>{
         if (res.data=== 1){
@@ -163,9 +167,8 @@ export default defineComponent({
             message: "Login successful",
             type: 'success'
           })
-          let username =this.loginForm.name
-          // router.push({path:'/about/'+username})
-          console.log(username)
+          let username =this.loginForm.username
+          router.push({path:'/studentsHome/'+username})
         }
         else {
           ElMessage.error("用户名或密码错误"

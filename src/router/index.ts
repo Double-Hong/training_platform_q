@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+
+import stuentHomeView from "@/views/studentviews/stuentHomeView.vue";
 import AdministratorView from '../views/OrganizationAdministratorViews/AdministratorView.vue'
 
 
@@ -22,7 +24,12 @@ const routes: Array<RouteRecordRaw> = [
     path:'/administrator/:id',
     name:'administrator',
     component:AdministratorView
-  }
+  },
+  {
+    path:'/studentsHome/:username',
+    name:'studentsHome',
+    component:stuentHomeView
+  },
 ]
 
 const router = createRouter({
