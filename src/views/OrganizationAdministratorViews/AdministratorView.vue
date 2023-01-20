@@ -47,14 +47,14 @@
       <el-form-item label="输入原密码">
         <el-input v-model="oldPassword" show-password clearable></el-input>
       </el-form-item>
-      <el-button style="width: 50%" @click="modifyPasswordFirstVisible=true">下一步</el-button>
+      <el-button style="width: 50%" @click="modifyPasswordFirst">下一步</el-button>
     </el-form>
     <el-form v-show="modifyPasswordFirstVisible">
       <el-form-item label="输入新密码">
-        <el-input></el-input>
+        <el-input v-model="newPassword" show-password clearable></el-input>
       </el-form-item>
 <!--      <el-button @click="modifyPasswordFirstVisible=false">上一步</el-button>-->
-      <el-button>确认修改</el-button>
+      <el-button @click="modifyPasswordSecond">确认修改</el-button>
     </el-form>
   </el-dialog>
 </template>
@@ -63,6 +63,7 @@
 import {useRouter} from "vue-router";
 import {defineComponent, reactive, ref} from "vue";
 import axios from "axios";
+import {ElMessage} from "element-plus";
 
 export default defineComponent({
   name: "AdministratorView",
@@ -103,7 +104,35 @@ export default defineComponent({
     })
     //确认原密码
     const modifyPasswordFirst = ()=>{
-      console.log()
+      axios.post("http://localhost:9090/personal-info-entity/checkOldPassword",{
+        id:pageInfo.id,
+        password:oldPassword.value,
+      }).then(res =>{
+        if (res.data===1){
+          modifyPasswordFirstVisible.value=true
+        }
+        else{
+          ElMessage({
+            showClose:true,
+            message:"原密码错误!",
+            type:'error',
+          })
+        }
+      })
+    }
+    const modifyPasswordSecond = ()=>{
+      axios.post("http://localhost:9090/personal-info-entity/modifyPassword",{
+        id:pageInfo.id,
+        password:newPassword.value
+      }).then(res=>{
+        if (res.data==1){
+          ElMessage({
+            showClose:true,
+            message:"修改成功",
+            type:'success'
+          })
+        }
+      })
     }
     return {
       pageInfo,
@@ -111,6 +140,7 @@ export default defineComponent({
       modifyPasswordVisible,
       modifyPasswordFirstVisible,
       modifyPasswordFirst,
+      modifyPasswordSecond,
       oldPassword,
       newPassword,
     }
