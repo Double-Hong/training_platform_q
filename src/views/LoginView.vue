@@ -168,7 +168,7 @@ export default defineComponent({
             type: 'success'
           })
           let username =this.loginForm.username
-          router.push({path:'udentsHome/'+username})
+          router.push({path:'studentsHome/'+username})
         }
         else if (res.data === 1&&this.loginForm.userType === 2){
           ElMessage({
