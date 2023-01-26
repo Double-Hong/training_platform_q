@@ -36,14 +36,14 @@
       </el-descriptions-item>
       <el-descriptions-item label="所属机构" label-align="center" label-class-name="labelTwo">
         <el-tooltip
-            content="点击查看机构信息"
-
+            content="查看机构信息"
         >
-          <el-button size="large">{{ pageInfo.organizationName }}</el-button>
+          <el-button size="large" @click="openSchoolView">{{ pageInfo.organizationName }}</el-button>
         </el-tooltip>
 
       </el-descriptions-item>
     </el-descriptions>
+    <br><br>
     <el-button @click="openModifyPassword">修改密码</el-button>
     <el-button @click="openModifyInfo">修改个人信息</el-button>
   </div>
@@ -109,21 +109,19 @@ import {useRouter} from "vue-router";
 import {defineComponent, reactive, ref} from "vue";
 import axios from "axios";
 import {ElMessage} from "element-plus";
+import router from "@/router";
 
 export default defineComponent({
   name: "AdministratorView",
   created() {
     const myRouter = useRouter();
     this.pageInfo.id = <string>myRouter.currentRoute.value.params.id
-    // this.pageInfo.username = <string>myRouter.currentRoute.value.params.username
     axios.get("http://localhost:9090/personal-info-entity/getPersonalInfo/" + this.pageInfo.id).then(res => {
       this.userData.administratorInfo[0] = res.data
       this.pageInfo.username = res.data.username
-      this.pageInfo.organizationId=res.data.organizationId
-      // console.log(res.data)
-      console.log(res.data.organizationId+this.pageInfo.organizationId)
-      axios.get("http://localhost:9090/organization-info-entity/getNameById/"+this.pageInfo.organizationId).then(res=>{
-        this.pageInfo.organizationName=res.data
+      this.pageInfo.organizationId = res.data.organizationId
+      axios.get("http://localhost:9090/organization-info-entity/getNameById/" + this.pageInfo.organizationId).then(res => {
+        this.pageInfo.organizationName = res.data
       })
     })
 
@@ -132,8 +130,8 @@ export default defineComponent({
     const pageInfo = reactive({
       id: '',
       username: '',
-      organizationId:'',
-      organizationName:'',
+      organizationId: '',
+      organizationName: '',
     })
     const modifyPasswordVisible = ref(false)
     const modifyPasswordFirstVisible = ref(false)
@@ -257,6 +255,12 @@ export default defineComponent({
         }
       })
     }
+    //查看机构简介
+    const openSchoolView = () => {
+      router.push({
+        path: '/school/' + pageInfo.organizationId
+      })
+    }
     return {
       pageInfo,
       userData,
@@ -271,6 +275,7 @@ export default defineComponent({
       oldPassword,
       newPassword,
       modifyInfo,
+      openSchoolView,
     }
   }
 })

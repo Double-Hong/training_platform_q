@@ -164,6 +164,7 @@ export default defineComponent({
 
           // Cookies.set('name',this.loginForm.name)
           ElMessage({
+            showClose:true,
             message: "Login successful",
             type: 'success'
           })
@@ -172,6 +173,7 @@ export default defineComponent({
         }
         else if (res.data === 1&&this.loginForm.userType === 2){
           ElMessage({
+            showClose:true,
             message: "Adminnistrator Login successful",
             type: 'success'
           })

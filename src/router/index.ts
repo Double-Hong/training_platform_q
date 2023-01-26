@@ -4,7 +4,7 @@ import LoginView from '../views/LoginView.vue'
 
 import studentHomeView from "@/views/studentviews/stuentHomeView.vue";
 import AdministratorView from '../views/OrganizationAdministratorViews/AdministratorView.vue'
-
+import SchoolView from '../views/OrganizationAdministratorViews/SchoolView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -29,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
     path:'/studentsHome/:username',
     name:'studentsHome',
     component:studentHomeView
+  },
+  {
+    path:'/school/:id',
+    name:'school',
+    component:SchoolView
   },
 ]
 
