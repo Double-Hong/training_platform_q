@@ -1,35 +1,6 @@
 <template>
   <div id="two">
-    <h1>{{ organizationInfo.name }}</h1>
-    <el-descriptions :border="true" :column="1" size="large">
-      <el-descriptions-item label="机构名" label-align="center" label-class-name="labelTwo" min-width="1">
-        {{ organizationInfo.name }}
-      </el-descriptions-item>
-      <el-descriptions-item label="机构电话" label-align="center" label-class-name="labelTwo" min-width="1">
-        {{ organizationInfo.phone }}
-      </el-descriptions-item>
-      <el-descriptions-item label="机构邮箱" label-align="center" label-class-name="labelTwo" min-width="1">
-        {{ organizationInfo.email }}
-      </el-descriptions-item>
-      <el-descriptions-item label="机构介绍" label-align="center" label-class-name="labelTwo" min-width="1">
-        {{ organizationInfo.introduction }}
-      </el-descriptions-item>
-      <el-descriptions-item label="机构要求" label-align="center" label-class-name="labelTwo" min-width="1">
-        {{ organizationInfo.entryRequirement }}
-      </el-descriptions-item>
-<!--      <el-descriptions-item label="姓名" label-align="center" label-class-name="labelTwo" min-width="200">-->
-<!--        {{ userData.administratorInfo[0].name }}-->
-<!--      </el-descriptions-item>-->
-<!--      <el-descriptions-item label="性别" label-align="center" label-class-name="labelTwo">-->
-<!--        {{ userData.administratorInfo[0].sex }}-->
-<!--      </el-descriptions-item>-->
-<!--      <el-descriptions-item label="年龄" label-align="center" label-class-name="labelTwo">-->
-<!--        {{ userData.administratorInfo[0].age }}-->
-<!--      </el-descriptions-item>-->
-<!--      <el-descriptions-item label="邮箱" label-align="center" label-class-name="labelTwo">-->
-<!--        {{ userData.administratorInfo[0].email }}-->
-<!--      </el-descriptions-item>-->
-    </el-descriptions>
+    <router-view/>
   </div>
   <div id="menu">
     <el-button type="primary" style="position: absolute;top: 8%;left: 40%" @click="back">返回</el-button>
@@ -40,8 +11,8 @@
         <template #title>
           <span>菜单</span>
         </template>
-        <el-menu-item index="1-1">机构简介</el-menu-item>
-        <el-menu-item index="1-2">机构人员</el-menu-item>
+        <el-menu-item index="1-1" @click="goToIntroduction">机构简介</el-menu-item>
+        <el-menu-item index="1-2" @click="goToStaff">机构人员</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
@@ -51,26 +22,27 @@
 import router from "@/router";
 import {defineComponent, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
-import axios from "axios";
 
 export default defineComponent({
   name: "SchoolView",
   created() {
     const myRouter = useRouter()
     this.pageInfo.organizationId = <string>myRouter.currentRoute.value.params.id
-    axios.get("http://localhost:9090/organization-info-entity/getOrganizationById/" + this.pageInfo.organizationId).then(res => {
-      this.organizationInfo = res.data
-      this.pageInfo.organizationName = res.data.name
-      console.log(this.organizationInfo.name)
+    this.pageInfo.id=<string>myRouter.currentRoute.value.params.id2
+    router.push({
+      path:'/school/'+this.pageInfo.organizationId+'/'+this.pageInfo.id+'/introduction'
     })
   },
   setup() {
     const back = () => {
-      router.back()
+      router.push({
+        path:'/administrator/'+pageInfo.id
+      })
     }
     const pageInfo = reactive({
       organizationId: '',
       organizationName: '',
+      id:'',
     })
     const organizationInfo = ref({
       id: '',
@@ -81,10 +53,22 @@ export default defineComponent({
       createTime: '',
       entryRequirement: '',
     })
+    const goToIntroduction = () =>{
+      router.push({
+        path:'/school/'+pageInfo.organizationId+'/'+pageInfo.id+'/introduction'
+      })
+    }
+    const goToStaff = ()=>{
+      router.push({
+        path:'/school/'+pageInfo.organizationId+'/'+pageInfo.id+'/staff'
+      })
+    }
     return {
       back,
       pageInfo,
       organizationInfo,
+      goToIntroduction,
+      goToStaff,
     }
   }
 })

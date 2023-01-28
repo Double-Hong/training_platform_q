@@ -46,6 +46,7 @@
     <br><br>
     <el-button @click="openModifyPassword">修改密码</el-button>
     <el-button @click="openModifyInfo">修改个人信息</el-button>
+    <el-button @click="goToStudentList">查看机构学员</el-button>
   </div>
   <el-dialog
       title="修改密码"
@@ -258,7 +259,12 @@ export default defineComponent({
     //查看机构简介
     const openSchoolView = () => {
       router.push({
-        path: '/school/' + pageInfo.organizationId
+        path: '/school/' + pageInfo.organizationId+'/'+pageInfo.id
+      })
+    }
+    const goToStudentList = ()=>{
+      router.push({
+        path:'/studentList/'+pageInfo.organizationId
       })
     }
     return {
@@ -276,6 +282,7 @@ export default defineComponent({
       newPassword,
       modifyInfo,
       openSchoolView,
+      goToStudentList,
     }
   }
 })
