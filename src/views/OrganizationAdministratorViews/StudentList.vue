@@ -7,6 +7,7 @@
     <el-table-column prop="name" label="姓名" width="180" />
     <el-table-column prop="phone" label="电话" />
     <el-table-column prop="sex" label="性别" />
+
     <el-table-column prop="qq" label="QQ" />
     <el-table-column prop="email" label="邮箱" />
     <el-table-column prop="phone" label="电话" />
