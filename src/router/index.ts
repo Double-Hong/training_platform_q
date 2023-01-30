@@ -8,7 +8,7 @@ import SchoolView from '../views/OrganizationAdministratorViews/SchoolView.vue'
 import IntroductionView from "@/views/OrganizationAdministratorViews/IntroductionView.vue";
 import StaffView from "@/views/OrganizationAdministratorViews/StaffView.vue"
 import StudentList from '../views/OrganizationAdministratorViews/StudentList.vue'
-
+import CourseView from '../views/OrganizationAdministratorViews/CourseView.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -45,18 +45,22 @@ const routes: Array<RouteRecordRaw> = [
                 component: IntroductionView
             },
             {
-              path:'staff',
-              name:'staff',
-              component:StaffView
+                path: 'staff',
+                name: 'staff',
+                component: StaffView
             }
         ]
     },
     {
-        path:'/studentList/:organizationId',
-        name:'studentList',
-        component:StudentList
+        path: '/studentList/:organizationId',
+        name: 'studentList',
+        component: StudentList
     },
-
+    {
+        path: '/course/:peopleId/:organizationId',
+        name: 'course',
+        component: CourseView
+    },
 ]
 
 const router = createRouter({

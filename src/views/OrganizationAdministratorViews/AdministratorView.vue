@@ -47,6 +47,7 @@
     <el-button @click="openModifyPassword">修改密码</el-button>
     <el-button @click="openModifyInfo">修改个人信息</el-button>
     <el-button @click="goToStudentList">查看机构学员</el-button>
+    <el-button @click="goToCourseView">课程管理</el-button>
   </div>
   <el-dialog
       title="修改密码"
@@ -102,7 +103,6 @@
     </el-form>
     <el-button @click="modifyInfo">确认修改</el-button>
   </el-dialog>
-
 </template>
 
 <script lang="ts">
@@ -267,6 +267,11 @@ export default defineComponent({
         path:'/studentList/'+pageInfo.organizationId
       })
     }
+    const goToCourseView = () => {
+      router.push({
+        path:'/course/'+pageInfo.id+'/'+pageInfo.organizationId
+      })
+    }
     return {
       pageInfo,
       userData,
@@ -283,6 +288,7 @@ export default defineComponent({
       modifyInfo,
       openSchoolView,
       goToStudentList,
+      goToCourseView,
     }
   }
 })
