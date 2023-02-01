@@ -32,13 +32,28 @@
           >
             <el-sub-menu index="1">
               <template #title>
-
-                <span>菜单</span>
+                <span >菜单</span>
               </template>
 
-              <el-menu-item index="1-1" @click="">学习计划</el-menu-item>
-              <el-menu-item index="1-2" @click="">学习</el-menu-item>
-              <el-menu-item index="1-3" @click="">考试</el-menu-item>
+              <el-menu-item index="1-1" @click="onLearningplane">学习计划</el-menu-item>
+              <el-menu
+                  default-active="2"
+                  class="el-menu-vertical-demo"
+                  @open="handleOpen"
+                  @close="handleClose"
+                  style="width: auto"
+
+              >
+                <el-sub-menu index="1">
+                  <template #title>
+
+                    <span style="text-align: center">学习章节</span>
+                  </template>
+                <el-menu-item index="1-1" @click="onLeaning1">章节一</el-menu-item>
+                <el-menu-item index="1-2" @click="onLeaning2">章节二</el-menu-item>
+                </el-sub-menu>
+              </el-menu>
+              <el-menu-item index="1-3" @click="onExamination">考试</el-menu-item>
               <el-menu-item index="1-4" @click="onStudenthome">个人信息</el-menu-item>
 <!--              <el-menu-item index="1-5" @click="">-->
 <!--                &lt;!&ndash;                <template #title >备忘录</template>&ndash;&gt;-->
@@ -96,11 +111,17 @@
       <el-dialog
           v-model="UpdatePasswordDialogVisible"
           title="修改用户密码"
-          width="20%"
+          width="30%"
           destroy-on-close
           center>
-        <el-form-item label="新密码">
-          <el-input clearable v-model="mypageinfo.newpassword" show-password/>
+        <el-form-item label="旧的密码">
+          <el-input clearable v-model="mypageinfo.oldpasswrod" show-password/>
+        </el-form-item>
+        <el-form-item label="新的密码">
+          <el-input clearable v-model="mypageinfo.newpassword1" show-password/>
+        </el-form-item>
+        <el-form-item label="再次输入">
+          <el-input clearable v-model="mypageinfo.newpasswrod2" show-password/>
         </el-form-item>
         <template #footer>
       <span class="dialog-footer">
@@ -186,10 +207,10 @@
 </template>
 
 <script>
-import {defineComponent, reactive, ref, retrieve} from "vue";
+import {defineComponent, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import router from "@/router";
-import axios, {options} from "axios";
+import axios from "axios";
 import {ElMessage} from "element-plus";
 
 export default defineComponent({
@@ -217,8 +238,11 @@ export default defineComponent({
       ],
     })
     const mypageinfo = reactive({
-      newpassword: ''
+      oldpasswrod:'',
+      newpassword1: '',
+      newpasswrod2:'',
     })
+
     const updatepersoninfo = () => {
 
       personDialogVisible.value = true
@@ -260,19 +284,28 @@ export default defineComponent({
      })
     }
     const makesureupdatepassword = () => {
-      console.log(personinfo)
-      personinfo.password = mypageinfo.newpassword
-      axios.post("http://localhost:9090/organization-info-entity/updateOrganizationinfo", personinfo).then(res => {
-        if (res.data === 1) {
-          ElMessage({
-            message: "修改成功",
-            type: 'success'
+      if (mypageinfo.oldpasswrod === personinfo.password){
+        if (mypageinfo.newpasswrod2 === mypageinfo.newpassword1){
+          personinfo.password = mypageinfo.newpassword1
+          axios.post("http://localhost:9090/organization-info-entity/updateOrganizationinfo", personinfo).then(res => {
+            if (res.data === 1) {
+              ElMessage({
+                message: "修改成功",
+                type: 'success'
+              })
+            } else {
+              ElMessage.error("修改失败"
+              )
+            }
           })
-        } else {
-          ElMessage.error("修改失败"
-          )
         }
-      })
+        else {
+          ElMessage.error("两次输入的新密码不一致！")
+        }
+      }
+      else {
+        ElMessage.error("输入的原密码错误！")
+      }
       UpdatePasswordDialogVisible.value = false
     }
 
@@ -291,7 +324,9 @@ export default defineComponent({
     })
     const updatepassword = () => {
       UpdatePasswordDialogVisible.value = true
-      mypageinfo.newpassword = ""
+      mypageinfo.newpassword1 = ""
+      mypageinfo.newpasswrod2=''
+      mypageinfo.oldpasswrod=''
     }
     return {
       personinfo,
@@ -314,9 +349,23 @@ export default defineComponent({
     },
     onStudenthome(){
       router.push({path:'/studentsHome/'+this.pageInfo.userName})
-    }
+    },
+    onLearningplane(){
+      router.push({path:'/learningPlane/'+this.pageInfo.userName})
+    },
+    onLeaning1(){
+      router.push({path:'/learning1/'+this.pageInfo.userName})
+    },
+    onLeaning2(){
+      router.push({path:'/learning2/'+this.pageInfo.userName})
+    },
+    onExamination(){
+      router.push({path:'/examination/'+this.pageInfo.userName})
+    },
+
   },
   created() {
+
     const myroute = useRouter()
     this.pageInfo.userName = myroute.currentRoute.value.params.username
     axios.get("http://localhost:9090/personal-info-entity/FindUserByUserName/" + this.pageInfo.userName).then(res => {
@@ -340,11 +389,9 @@ export default defineComponent({
         })
       }
       axios.post("http://localhost:9090/organization-info-entity/getAllOrganizationName").then(res => {
-        // this.options.value = res.data.name
-        // console.log(res.data)
+
         this.options.info = res.data
-        // console.log(this.options.info)
-        // console.log(this.options.info[0].name)
+
       })
     })
   }
